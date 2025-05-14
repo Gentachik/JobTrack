@@ -12,10 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+
 import java.util.List;
 
 import lombok.Data;
-import lombok.Generated;
 
 @Entity
 @Data
@@ -25,31 +25,19 @@ public class Job {
             strategy = GenerationType.IDENTITY
     )
     private Long jobId;
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private String jobName;
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private String link;
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private String field;
     private boolean isResult;
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private String country;
     private String city;
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private String methodOfApplication;
-    @Column(
-            nullable = false
-    )
+    @Column(nullable = false)
     private boolean withCoverLetter;
     private double salaryInUSD;
     @ElementCollection
@@ -57,9 +45,7 @@ public class Job {
     @ElementCollection
     private List<String> requiredSkills;
     @ManyToOne
-    @JoinColumn(
-            name = "company_id"
-    )
+    @JoinColumn(name = "company_id")
     private Company company;
     @OneToMany(
             mappedBy = "job",

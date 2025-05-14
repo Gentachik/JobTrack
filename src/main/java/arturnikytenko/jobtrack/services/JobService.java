@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,20 +29,18 @@ public class JobService {
 
     public List<Job> getJobs() {
         List<Job> jobs = new ArrayList<>();
-
         for (Job job : jobRepository.findAll()) {
             jobs.add(job);
         }
-
         return jobs;
     }
 
-    public Job getJob(Long id) {
-        return this.jobRepository.findJobByJobId(id);
+    public Job getJob(String id) {
+        return this.jobRepository.findJobByJobId(Long.valueOf(id));
     }
 
     public Job addNewJob(JobCreateDTO jobDTO) {
-        Company company = this.companyRepository.findByCompanyName(jobDTO.getCompanyName());
+        Company company = companyRepository.findByCompanyName(jobDTO.getCompanyName());
         if (company == null) {
             company = new Company();
             company.setCompanyName(jobDTO.getCompanyName());
@@ -79,5 +78,13 @@ public class JobService {
         job.setRequiredLanguages(dto.getRequiredLanguages());
         job.setRequiredSkills(dto.getRequiredSkills());
         return job;
+    }
+    @Transactional
+    public boolean deleteJobById(String id) {
+        Job job = jobRepository.findJobByJobId(Long.valueOf(id));
+        if (job == null)
+            return false;
+        jobRepository.delete(job);
+        return true;
     }
 }

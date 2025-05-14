@@ -20,7 +20,7 @@ public class JobController {
 
     @PostMapping({"/add"})
     public ResponseEntity<Void> addNewJob(@RequestBody JobCreateDTO jobDTO) {
-        Job savedJob = this.jobService.addNewJob(jobDTO);
+        Job savedJob = jobService.addNewJob(jobDTO);
         if (savedJob != null)
             return ResponseEntity.created(URI.create("/api/job/" + savedJob.getJobId())).build();
         else
@@ -29,20 +29,25 @@ public class JobController {
 
     @GetMapping
     public ResponseEntity<List<Job>> getJobs() {
-        List<Job> jobs = this.jobService.getJobs();
+        List<Job> jobs = jobService.getJobs();
         return ResponseEntity.ok(jobs);
     }
 
-    @GetMapping({"/{id:\\\\d+}"})
-    public ResponseEntity<Job> getJob(@PathVariable Long id) {
-        Job job = this.jobService.getJob(id);
+    @GetMapping({"/{id}"})
+    public ResponseEntity<Job> getJob(@PathVariable String id) {
+        Job job = jobService.getJob(id);
         if (job == null)
             return ResponseEntity.notFound().build();
         else
             return ResponseEntity.ok(job);
     }
 
-    @DeleteMapping({"/{id:\\\\d+}"})
-    public void deleteJob(@PathVariable Long id) {
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<Void> deleteJob(@PathVariable String id) {
+        boolean res = jobService.deleteJobById(id);
+        if (res)
+            return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.notFound().build();
     }
 }

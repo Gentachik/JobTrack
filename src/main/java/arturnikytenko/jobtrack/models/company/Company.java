@@ -21,4 +21,10 @@ public class Company {
             orphanRemoval = true
     )
     private List<Job> jobs;
+    @PreRemove
+    private void removeJobs() {
+        for (Job job : jobs) {
+            job.setCompany(null);
+        }
+    }
 }
